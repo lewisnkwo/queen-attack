@@ -73,9 +73,7 @@ export default class QueenAttack<T extends BoardSquare> {
       whiteQueenRow - blackQueenRow === whiteQueenColumn - blackQueenColumn ||
       whiteQueenRow - blackQueenRow === blackQueenColumn - whiteQueenColumn;
 
-    if (isSameRowOrColumn()) {
-      return true;
-    } else if (canAttackDiagonally()) {
+    if (isSameRowOrColumn() || canAttackDiagonally()) {
       return true;
     }
     return false;
