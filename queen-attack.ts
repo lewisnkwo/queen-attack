@@ -9,7 +9,7 @@ interface Queens<T> {
 export default class QueenAttack<T extends BoardSquare> {
   public white: T[] = [];
   public black: T[] = [];
-  public board: string = "";
+  public board: BoardSquare[][] = [];
 
   private defaultBoard: BoardSquare[][] = [
     ["_", "_", "_", "_", "_", "_", "_", "_"],
@@ -30,10 +30,7 @@ export default class QueenAttack<T extends BoardSquare> {
     this.black = queens.black;
 
     const positionOne = this.positionQueen(this.white, "W", this.defaultBoard);
-    const positionTwo = this.positionQueen(this.black, "B", positionOne);
-
-    // FOR TEST: toString representation
-    this.board = this.toBoardString(positionTwo).join("");
+    this.board = this.positionQueen(this.black, "B", positionOne);
   }
 
   private positionQueen = (
@@ -48,7 +45,7 @@ export default class QueenAttack<T extends BoardSquare> {
     return board;
   };
 
-  private toBoardString = (rows: BoardSquare[][]): string[] => {
+  public toString = (): string => {
     const toStringRow = (row: BoardSquare[]): string[] => {
       let stringRow: string[] = [];
 
@@ -62,10 +59,10 @@ export default class QueenAttack<T extends BoardSquare> {
     };
 
     let board: string[] = [];
-    rows.forEach((val) => {
+    this.board.forEach((val) => {
       board = [...board, `${toStringRow(val).join("")}${"\n"}`];
     });
-    return board;
+    return board.join("");
   };
 
   public canAttack = (): boolean => {

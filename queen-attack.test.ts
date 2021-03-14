@@ -32,7 +32,7 @@ describe("Queens", () => {
       "_ _ _ _ _ _ B _",
       "_ _ _ _ _ _ _ _\n",
     ].join("\n");
-    expect(queens.board.toString()).toEqual(board);
+    expect(queens.toString()).toEqual(board);
   });
 
   it("queens cannot attack", () => {
