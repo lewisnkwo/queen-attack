@@ -64,16 +64,16 @@ export default class QueenAttack<T extends BoardSquare> {
     const blackQueenRow = this.black[0] as number;
     const blackQueenColumn = this.black[1] as number;
 
+    const isSameRowOrColumn = (): boolean =>
+      whiteQueenRow === blackQueenRow || whiteQueenColumn === blackQueenColumn;
+
     const canAttackDiagonally = (): boolean =>
       (whiteQueenRow === whiteQueenColumn &&
         blackQueenRow === blackQueenColumn) ||
       whiteQueenRow - blackQueenRow === whiteQueenColumn - blackQueenColumn ||
       whiteQueenRow - blackQueenRow === blackQueenColumn - whiteQueenColumn;
 
-    if (
-      whiteQueenRow === blackQueenRow ||
-      whiteQueenColumn === blackQueenColumn
-    ) {
+    if (isSameRowOrColumn()) {
       return true;
     } else if (canAttackDiagonally()) {
       return true;
