@@ -11,16 +11,9 @@ export default class QueenAttack<T extends BoardSquare> {
   public black: T[] = [];
   public board: BoardSquare[][] = [];
 
-  private defaultBoard: BoardSquare[][] = [
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-    ["_", "_", "_", "_", "_", "_", "_", "_"],
-  ];
+  private defaultBoard: BoardSquare[][] = [...new Array(8)].map(() =>
+    [...new Array(8)].map(() => "_")
+  );
 
   constructor(queens: Queens<T>) {
     if (queens.white.toString() === queens.black.toString()) {
