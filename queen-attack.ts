@@ -1,68 +1,60 @@
-type BoardSquare = string | number;
 type QueenColor = "W" | "B";
+type BoardSquare = QueenColor | "_";
+type Coordinate = [Position, Position];
+type Position = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-interface Queens<T> {
-  white: T[];
-  black: T[];
-}
+// export interface Queens {
+//   white: Coordinate;
+//   black: Coordinate;
+// }
 
-export default class QueenAttack<T extends BoardSquare> {
-  public white: T[] = [];
-  public black: T[] = [];
+export type Queens = Record<QueenColor, Coordinate>;
+
+export default class QueenAttack {
+  public white: Queens["W"];
+  public black: Queens["B"];
   public board: BoardSquare[][] = [];
 
   private defaultBoard: BoardSquare[][] = [...new Array(8)].map(() =>
     [...new Array(8)].map(() => "_")
   );
 
-  constructor(queens: Queens<T>) {
-    if (queens.white.toString() === queens.black.toString()) {
+  constructor(queens: Queens) {
+    if (queens.W.toString() === queens.B.toString()) {
       throw new Error("Queens cannot share the same space");
     }
-    this.white = queens.white;
-    this.black = queens.black;
+    this.white = queens.W;
+    this.black = queens.B;
 
     const positionOne = this.positionQueen(this.white, "W", this.defaultBoard);
     this.board = this.positionQueen(this.black, "B", positionOne);
   }
 
   private positionQueen = (
-    queen: T[],
+    queen: Coordinate,
     color: QueenColor,
     board: BoardSquare[][]
   ): BoardSquare[][] => {
-    const row = queen[0] as number;
-    const column = queen[1] as number;
+    const row = queen[0];
+    const column = queen[1];
 
     board[row].splice(column, 1, color);
     return board;
   };
 
   public toString = (): string => {
-    const toStringRow = (row: BoardSquare[]): string[] => {
-      let stringRow: string[] = [];
-
-      for (let i = 0; i < 8; i++) {
-        stringRow = [...stringRow, row[i].toString()];
-        if (i < 7) {
-          stringRow = [...stringRow, " "];
-        }
-      }
-      return stringRow;
-    };
-
     let board: string[] = [];
     this.board.forEach((val) => {
-      board = [...board, `${toStringRow(val).join("")}${"\n"}`];
+      // use forEach for side effects (e.g. printing logs), use map/reduce instead
+      board = [...board, `${val.join(" ")}${"\n"}`];
     });
     return board.join("");
   };
 
   public canAttack = (): boolean => {
-    const whiteQueenRow = this.white[0] as number;
-    const whiteQueenColumn = this.white[1] as number;
-    const blackQueenRow = this.black[0] as number;
-    const blackQueenColumn = this.black[1] as number;
+    const [whiteQueenRow, whiteQueenColumn] = this.white;
+    const blackQueenRow = this.black[0];
+    const blackQueenColumn = this.black[1];
 
     const isSameRowOrColumn = (): boolean =>
       whiteQueenRow === blackQueenRow || whiteQueenColumn === blackQueenColumn;
@@ -73,9 +65,6 @@ export default class QueenAttack<T extends BoardSquare> {
       whiteQueenRow - blackQueenRow === whiteQueenColumn - blackQueenColumn ||
       whiteQueenRow - blackQueenRow === blackQueenColumn - whiteQueenColumn;
 
-    if (isSameRowOrColumn() || canAttackDiagonally()) {
-      return true;
-    }
-    return false;
+    return isSameRowOrColumn() || canAttackDiagonally();
   };
 }
